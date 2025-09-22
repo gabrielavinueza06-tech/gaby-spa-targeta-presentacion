@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaby Spa - Cuerpo y Alma</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #00bcd4 0%, #4fc3f7 50%, #81d4fa 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: backgroundShift 15s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { background: linear-gradient(135deg, #00bcd4 0%, #4fc3f7 50%, #81d4fa 100%); }
+            33% { background: linear-gradient(135deg, #26c6da 0%, #29b6f6 50%, #4fc3f7 100%); }
+            66% { background: linear-gradient(135deg, #4fc3f7 0%, #81d4fa 50%, #b3e5fc 100%); }
+        }
+
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 35px;
+            box-shadow: 
+                0 30px 60px rgba(0,188,212,0.3),
+                0 0 0 1px rgba(255,255,255,0.2);
+            max-width: 850px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(20px);
+            transition: all 0.6s ease;
+            animation: cardFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .card:hover {
+            transform: translateY(-15px);
+            box-shadow: 
+                0 50px 100px rgba(0,188,212,0.4),
+                0 0 0 1px rgba(255,255,255,0.3);
+        }
+
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.1;
+            z-index: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #00acc1 0%, #26c6da 50%, #4dd0e1 100%);
+            padding: 50px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            animation: headerAnimation 20s linear infinite;
+        }
+
+        @keyframes headerAnimation {
+            0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+        }
+
+        .upload-controls {
+            display: none;
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        .logo-section {
+            position: relative;
+            z-index: 2;
+            animation: logoEntrance 2s ease-out;
+        }
+
+        @keyframes logoEntrance {
+            from { opacity: 0; transform: translateY(-50px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .main-title, .spa-title {
+            display: none;
+        }
+
+        .logo-container {
+            width: 350px;
+            height: 250px;
+            margin: 30px auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: logoFloat 6s ease-in-out infinite;
+            filter: drop-shadow(0 15px 35px rgba(0,0,0,0.2));
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-10px) scale(1.02); }
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            animation: logoGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
+            50% { filter: drop-shadow(0 0 25px rgba(255,255,255,0.6)); }
+        }
+
+        .logo-container svg {
+            width: 200px;
+            height: 150px;
+            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.3));
+            animation: logoBreath 5s ease-in-out infinite;
+        }
+
+        @keyframes logoBreath {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .spa-title {
+            color: white;
+            font-size: 2.8em;
+            font-weight: 300;
+            letter-spacing: 6px;
+            margin-top: 30px;
+            text-shadow: 
+                0 0 15px rgba(255,255,255,0.6),
+                0 5px 15px rgba(0,0,0,0.3);
+            animation: subtitlePulse 4s ease-in-out infinite;
+            display: none;
+        }
+
+        @keyframes subtitlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .content {
+            background: linear-gradient(135deg, #00bcd4 0%, #4fc3f7 50%, #81d4fa 100%);
+            padding: 50px 30px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .expert-info {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .expert-name {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: nameFloat 5s ease-in-out infinite;
+        }
+
+        @keyframes nameFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .expert-title {
+            font-size: 1.4em;
+            font-style: italic;
+            opacity: 0.95;
+            animation: titleSway 6s ease-in-out infinite;
+        }
+
+        @keyframes titleSway {
+            0%, 100% { transform: translateX(0px); }
+            33% { transform: translateX(5px); }
+            66% { transform: translateX(-5px); }
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .service-column ul {
+            list-style: none;
+        }
+
+        .service-column li {
+            padding: 12px 0;
+            font-size: 1.1em;
+            position: relative;
+            padding-left: 35px;
+            transition: all 0.4s ease;
+            animation: serviceSlideIn 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .service-column li:nth-child(1) { animation-delay: 0.1s; }
+        .service-column li:nth-child(2) { animation-delay: 0.2s; }
+        .service-column li:nth-child(3) { animation-delay: 0.3s; }
+        .service-column li:nth-child(4) { animation-delay: 0.4s; }
+        .service-column li:nth-child(5) { animation-delay: 0.5s; }
+        .service-column li:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes serviceSlideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .service-column li:hover {
+            transform: translateX(10px) scale(1.02);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .service-column li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            font-size: 1em;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(180deg); }
+        }
+
+        .contact {
+            background: rgba(255,255,255,0.15);
+            margin: 40px -30px -50px -30px;
+            padding: 40px 30px;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-text {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            opacity: 0.95;
+            animation: contactTextFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes contactTextFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 
+                0 10px 30px rgba(37, 211, 102, 0.4),
+                0 0 0 0 rgba(37, 211, 102, 0.7);
+            animation: whatsappPulse 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes whatsappPulse {
+            0% { 
+                transform: scale(1);
+                box-shadow: 
+                    0 10px 30px rgba(37, 211, 102, 0.4),
+                    0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 
+                    0 15px 40px rgba(37, 211, 102, 0.6),
+                    0 0 0 10px rgba(37, 211, 102, 0.1);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 
+                    0 10px 30px rgba(37, 211, 102, 0.4),
+                    0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 
+                0 20px 50px rgba(37, 211, 102, 0.6),
+                0 0 0 15px rgba(37, 211, 102, 0.2);
+        }
+
+        .whatsapp-icon {
+            width: 45px;
+            height: 45px;
+            fill: white;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-icon {
+            position: absolute;
+            opacity: 0.05;
+            font-size: 2em;
+            animation: floatAround 15s linear infinite;
+        }
+
+        .floating-icon:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-icon:nth-child(2) {
+            top: 20%;
+            right: 15%;
+            animation-delay: 5s;
+        }
+
+        .floating-icon:nth-child(3) {
+            bottom: 30%;
+            left: 20%;
+            animation-delay: 10s;
+        }
+
+        .floating-icon:nth-child(4) {
+            bottom: 15%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        @keyframes floatAround {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -30px) rotate(90deg); }
+            50% { transform: translate(-15px, -20px) rotate(180deg); }
+            75% { transform: translate(-30px, 10px) rotate(270deg); }
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5em;
+                letter-spacing: 6px;
+            }
+            
+            .spa-title {
+                font-size: 2em;
+                letter-spacing: 3px;
+            }
+            
+            .services {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .whatsapp-btn {
+                width: 70px;
+                height: 70px;
+            }
+
+            .whatsapp-icon {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <!-- AQUÍ PONES TU IMAGEN DE FONDO - Reemplaza "TU_IMAGEN_FONDO.jpg" con el enlace de tu imagen -->
+        <div class="background-overlay" id="backgroundOverlay" style="background-image: url('TU_IMAGEN_FONDO.jpg'); opacity: 0.15;"></div>
+        <div class="floating-elements">
+            <div class="floating-icon">💆‍♀️</div>
+            <div class="floating-icon">🌸</div>
+            <div class="floating-icon">✨</div>
+            <div class="floating-icon">🌿</div>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="header">
+                <input type="file" id="logoInput" class="upload-input" accept="image/*" onchange="loadLogo(event)">
+                <input type="file" id="backgroundInput" class="upload-input" accept="image/*" onchange="loadBackground(event)">
+                
+                <div class="logo-section">
+                    <div class="logo-container" id="logoContainer">
+                        <!-- AQUÍ PONES TU LOGO - Reemplaza "TU_LOGO_AQUI.png" con el enlace de tu imagen -->
+                        <img src="1.png.png" alt="Logo" />
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="expert-info">
+                    <div class="expert-name">GABRIELA VINUEZA COSMIATRA</div>
+                    <div class="expert-title">Beauty Expert</div>
+                </div>
+                
+                <div class="services">
+                    <div class="service-column">
+                        <ul>
+                            <li>Tratamientos faciales y corporales</li>
+                            <li>Tratamientos de acné</li>
+                            <li>Masaje relajantes</li>
+                            <li>Masajes descontracturante</li>
+                            <li>Masajes con bambú</li>
+                            <li>Masaje deportivo</li>
+                        </ul>
+                    </div>
+                    <div class="service-column">
+                        <ul>
+                            <li>Masaje sueco</li>
+                            <li>Tratamientos pos operatorios</li>
+                            <li>Tratamientos reductores</li>
+                            <li>Drenajes linfáticos</li>
+                            <li>Suero terapia</li>
+                            <li>Aplicación de plasma rico en plaquetas</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="contact">
+                    <div class="contact-text">¡Contáctame ahora!</div>
+                    <a href="https://wa.me/593995552396?text=Hola%20Gaby,%20me%20interesa%20información%20sobre%20tus%20servicios%20de%20spa%20y%20belleza" 
+                       class="whatsapp-btn" target="_blank">
+                        <svg class="whatsapp-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.51 3.488"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadLogo(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const logoContainer = document.getElementById('logoContainer');
+                    logoContainer.innerHTML = `<img src="${e.target.result}" alt="Logo" />`;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function loadBackground(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const backgroundOverlay = document.getElementById('backgroundOverlay');
+                    backgroundOverlay.style.backgroundImage = `url(${e.target.result})`;
+                    backgroundOverlay.style.opacity = '0.15';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Crear partículas flotantes dinámicas
+        function createFloatingParticles() {
+            const card = document.querySelector('.card');
+            for(let i = 0; i < 6; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = '4px';
+                particle.style.height = '4px';
+                particle.style.background = 'rgba(255,255,255,0.6)';
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animation = `floatAround ${8 + Math.random() * 10}s linear infinite`;
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                card.appendChild(particle);
+            }
+        }
+
+        // Inicializar partículas cuando se carga la página
+        window.addEventListener('load', createFloatingParticles);
+    </script>
+</body>
+</html>
